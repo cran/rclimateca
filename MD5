@@ -1,0 +1,17 @@
+1028e7806a66cf343bb7b6ad640bd221 *DESCRIPTION
+9e04370f5a00e3cadf2f733579e3af4b *NAMESPACE
+c9a046ec1322429302300eb353eea597 *R/caches.R
+8e1a9adadc807b6d284250c4c6b1f89f *R/data.R
+0b9558a0f983afe485e9e491714ce88a *R/geodist.R
+b9d9fce5e90029acb0d49a8947ace6e0 *R/getdata.R
+4f9605dece3cf7b6c32f65612c181ada *R/getsites.R
+6b4ce146842358e79a02d940b60f3265 *R/melt.parallel.R
+58d04ba0e66c7027daa2244eb94bd03f *R/restquery.R
+ca8dba06b725477f43c1b336802a5246 *README.md
+b19c08415295afa5bd347ffb05100802 *data/climateLocs2016.rda
+28a554132e238a1fdef0cf8a5270f88a *man/clear_cache.Rd
+8ca5246491defb3698ff41fe13f52048 *man/climateLocs2016.Rd
+5ddd851fdca5457ebcca055b051a95ee *man/climatelong.Rd
+fe5c5af61d675b58424668f9b2bb18cd *man/getClimateData.Rd
+c0b1de62d56cee5e330c82e01c5c4a2c *man/getClimateDataRaw.Rd
+f7089d48025c1e92a3759b8db1b73fd2 *man/getClimateSites.Rd
