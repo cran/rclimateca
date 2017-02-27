@@ -4,10 +4,11 @@
 #' @param location A human-readable location that will be geocoded
 #' @param year A vector of years that the location must have data for
 #' @param n The number of rows to return
-#' @param locs The data.frame of locations. Use NULL to for \link{climateLocs2016}.
+#' @param locs The data.frame of locations. Use NULL to for \link{ecclimatelocs}.
+#' @param nicenames Sanitize names to type-able form
 #' @param cols The columns to return (use NULL for all columns)
 #'
-#' @return A subset of \link{climateLocs2016}
+#' @return A subset of \link{ecclimatelocs}
 #' @export
 #'
 #' @references
@@ -20,11 +21,11 @@
 #' getClimateSites("Wolfville, NS", year=2016)
 #' }
 #'
-getClimateSites <- function(location, year=NULL, n=5, locs=NULL,
-                     cols=c("Name", "Province", "Station ID", "Latitude (Decimal Degrees)",
+getClimateSites <- function(location, year=NULL, n=5, locs=NULL, nicenames=FALSE,
+                     cols=c("Name", "Province", "Station ID", "distance", "Latitude (Decimal Degrees)",
                             "Longitude (Decimal Degrees)", "First Year", "Last Year")) {
   if(is.null(locs)) {
-    locs <- climateLocs2016
+    locs <- ecclimatelocs
   }
   if(is.null(cols)) {
     cols <- names(locs)
@@ -42,7 +43,13 @@ getClimateSites <- function(location, year=NULL, n=5, locs=NULL,
     }),]
   }
   locs$distance <- geodist(lon, lat,
-                                   locs[["Longitude (Decimal Degrees)"]],
-                                   locs[["Latitude (Decimal Degrees)"]]) / 1000.0
-  locs[order(locs$distance), cols][1:n,]
+                           locs[["Longitude (Decimal Degrees)"]],
+                           locs[["Latitude (Decimal Degrees)"]]) / 1000.0
+  if(nicenames) {
+    names(locs) <- nice.names(names(locs))
+    locs <- locs[!duplicated(names(locs))] # removes duplicate lat/lon columns
+    cols <- nice.names(cols)
+  }
+  locs <- locs[order(locs$distance), cols][1:n,]
+  return(locs)
 }

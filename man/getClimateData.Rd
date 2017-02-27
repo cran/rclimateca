@@ -2,13 +2,19 @@
 % Please edit documentation in R/getdata.R
 \name{getClimateData}
 \alias{getClimateData}
+\alias{getClimateMUData}
 \title{Get Parsed and aggregated Environment Canada data}
 \usage{
 getClimateData(stationID, timeframe = c("monthly", "daily", "hourly"),
   year = NULL, month = NULL, day = NULL, cache = "ec.cache",
   quiet = TRUE, progress = c("text", "none", "tk"), format = c("wide",
   "long"), rm.na = FALSE, parsedates = TRUE, checkdates = TRUE,
-  ply = plyr::adply)
+  nicenames = FALSE, ply = plyr::adply)
+
+getClimateMUData(stationID, timeframe = c("monthly", "daily", "hourly"),
+  year = NULL, month = NULL, day = NULL, cache = "ec.cache",
+  quiet = TRUE, progress = c("text", "none", "tk"), rm.na = FALSE,
+  dataset.id = "ecclimate")
 }
 \arguments{
 \item{stationID}{The station ID, possibly found by \link{getClimateSites}}
@@ -35,14 +41,18 @@ datasets}
 \item{parsedates}{Flag to parse date/time information (useful for plotting).}
 
 \item{checkdates}{If checkdates is TRUE, the loop will not attempt to download if a year is
-marked as missing in \link{climateLocs2016}. Note that this information may be out of date,
+marked as missing in \link{ecclimatelocs}. Note that this information may be out of date,
 but this flag is useful to minimize the amount of downloading that needs to occur. This will
 also subset the resulting data frame to only contain the years/months requested.}
+
+\item{nicenames}{Use lower-case, unit-free names for columns.}
 
 \item{ply}{The plyr-like function that executes the loop and returns the result. Pass your
 own function accepting named arguments .data, .margins=1, .fun=function(row),
 .progress. This may be useful if all you need to do is extract information out of a large
 amount of climate data without the need to store it to disk.}
+
+\item{dataset.id}{The dataset identifier to use for mudata creation.}
 }
 \value{
 A data.frame (or the results of \code{ply} if passed).
@@ -54,14 +64,22 @@ years and/or stations.
 \examples{
 # don't test because fetching of file slows down testing
 \donttest{
-wv <- getClimateSites("Wolfville, NS", year=2016)
-stationID <- wv$`Station ID`[1]
+wv <- getClimateSites("Kentville, NS", year=2016, nicenames=TRUE)
+stationID <- wv$stationid[1]
 df <- getClimateData(stationID, timeframe="daily", year=2014:2016)
 
 # easy plotting
 library(ggplot2)
 df <- getClimateData(stationID, timeframe="daily", year=2014:2016, format="long")
 ggplot(df, aes(parsedDate, value)) + geom_line() + facet_wrap(~param, scales="free_y")
+
+# nicenames are FALSE by default
+df <- getClimateData(stationID, timeframe="daily", year=2014:2016, format="long", nicenames=TRUE)
+ggplot(df, aes(parseddate, value)) + geom_line() + facet_wrap(~param, scales="free_y")
+
+# use MUData option to use the MUData format
+md <- getClimateMUData(c(27141, 6354), year=1999, month=7:8, timeframe="daily")
+plot(md)
 }
 }
 \references{
