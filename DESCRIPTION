@@ -1,8 +1,8 @@
 Package: rclimateca
 Type: Package
 Title: Fetch Climate Data from Environment Canada
-Version: 0.2
-Date: 2017-02-16
+Version: 0.4
+Date: 2017-11-13
 Author: Dewey Dunnington <dewey@fishandwhistle.net>
 Maintainer: Dewey Dunnington <dewey@fishandwhistle.net>
 Description: The Environment Canada climate archives <http://climate.weather.gc.ca/>
@@ -16,10 +16,10 @@ Depends: R (>= 2.10)
 Imports: digest, httr, prettymapr, reshape2, lubridate
 URL: https://github.com/paleolimbot/rclimateca
 BugReports: https://github.com/paleolimbot/rclimateca/issues
-Suggests: ggplot2, mudata, testthat
+Suggests: ggplot2, mudata2, testthat
 LazyData: TRUE
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2017-02-27 17:32:29 UTC; dewey
+Packaged: 2017-11-13 04:25:11 UTC; dewey
 Repository: CRAN
-Date/Publication: 2017-02-27 21:48:27
+Date/Publication: 2017-11-13 05:35:13 UTC
