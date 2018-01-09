@@ -1,5 +1,5 @@
 
-#' Get Parsed and aggregated Environment Canada data
+#' DEPRECATED: Get Parsed and aggregated Environment Canada data
 #'
 #' Use this function to get Environment Canada climate data in bulk over multiple
 #' years and/or stations.
@@ -35,32 +35,15 @@
 #'
 #' @export
 #'
-#' @examples
-#' # don't test because fetching of file slows down testing
-#' \donttest{
-#' wv <- getClimateSites("Kentville, NS", year=2016, nicenames=TRUE)
-#' stationID <- wv$stationid[1]
-#' df <- getClimateData(stationID, timeframe="daily", year=2014:2016)
-#'
-#' # easy plotting
-#' library(ggplot2)
-#' df <- getClimateData(stationID, timeframe="daily", year=2014:2016, format="long")
-#' ggplot(df, aes(parsedDate, value)) + geom_line() + facet_wrap(~param, scales="free_y")
-#'
-#' # nicenames are FALSE by default
-#' df <- getClimateData(stationID, timeframe="daily", year=2014:2016, format="long", nicenames=TRUE)
-#' ggplot(df, aes(parseddate, value)) + geom_line() + facet_wrap(~param, scales="free_y")
-#'
-#' # use MUData option to use the MUData format
-#' library(mudata2)
-#' md <- getClimateMUData(c(27141, 6354), year=1999, month=7:8, timeframe="daily")
-#' autoplot(md)
-#' }
 getClimateData <- function(stationID, timeframe=c("monthly", "daily", "hourly"),
                            year=NULL, month=NULL, day=NULL, cache="ec.cache", quiet=TRUE,
                            progress=c("text", "none", "tk"), format=c("wide", "long"),
                            rm.na=FALSE, parsedates=TRUE, checkdates=TRUE,
                            nicenames=FALSE, ply=plyr::adply) {
+  # deprecation warning
+  message("getClimateData() is deprecated and will be removed in future versions: ",
+          "use ec_climate_data() instead")
+
   timeframe <- match.arg(timeframe)
   progress <- match.arg(progress)
   format <- match.arg(format)
@@ -143,6 +126,10 @@ getClimateMUData <- function(stationID, timeframe=c("monthly", "daily", "hourly"
                              year=NULL, month=NULL, day=NULL, cache="ec.cache", quiet=TRUE,
                              progress=c("text", "none", "tk"), rm.na=FALSE,
                              dataset.id="ecclimate") {
+  # deprecation warning
+  message("getClimateMUData() is deprecated and will be removed in future versions: ",
+          "use ec_climate_mudata() instead")
+
   if(!requireNamespace("mudata2", quietly = TRUE))
     stop("Package 'mudata2' required for call to 'getClimateMUData()")
   # get data
@@ -182,7 +169,7 @@ getClimateMUData <- function(stationID, timeframe=c("monthly", "daily", "hourly"
   mudata2::mudata(longdata, locations=locs, params=params, x_columns = "date")
 }
 
-#' Transform EC data to long format
+#' DEPRECATED: Transform EC data to long format
 #'
 #' @param df A wide data frame (obtained from \link{getClimateData} or \link{getClimateDataRaw})
 #' @param rm.na Flag to remove rows with an empty value. This may help compress large datasets.
@@ -190,17 +177,10 @@ getClimateMUData <- function(stationID, timeframe=c("monthly", "daily", "hourly"
 #' @return A melted \code{data.frame} (see reshape2::melt)
 #' @export
 #'
-#' @examples
-#' # don't test because fetching of file slows down testing
-#' \donttest{
-#' df <- getClimateData(27141, timeframe="daily", year=2014:2016)
-#' climatelong(df)
-#' # also works with nicenames=TRUE
-#' df <- getClimateData(27141, timeframe="daily", year=2014:2016, nicenames=TRUE)
-#' climatelong(df)
-#' }
-#'
 climatelong <- function(df, rm.na=FALSE) {
+  # deprecation warning
+  message("climatelong() is deprecated and will be removed in future versions.")
+
   cols <- names(df)
   quals <- c("parsedDate", "stationID", "Date/Time","Year","Month","Day",
              "Time", "Data Quality", "Weather")
@@ -229,7 +209,7 @@ climatelong <- function(df, rm.na=FALSE) {
   df
 }
 
-#' Get parsed CSV data from Environment Canada
+#' DEPRECATED: Get parsed CSV data from Environment Canada
 #'
 #' This function just downloads a .csv file from the bulk data service from
 #' Environment Canda. It follows as closely as possible the EC specifications,
@@ -251,15 +231,14 @@ climatelong <- function(df, rm.na=FALSE) {
 #' \url{http://climate.weather.gc.ca/historical_data/search_historic_data_e.html}
 #' \url{ftp://client_climate@ftp.tor.ec.gc.ca/Pub/Get_More_Data_Plus_de_donnees/Readme.txt}
 #'
-#' @examples
-#' # don't test because fetching of file slows down testing
-#' \donttest{
-#' getClimateDataRaw(27141, timeframe="monthly")
-#' }
 getClimateDataRaw <- function(stationID, timeframe=c("monthly", "daily", "hourly"),
                               Year=NA, Month=NA,
                               endpoint="http://climate.weather.gc.ca/climate_data/bulk_data_e.html",
                               flag.info=FALSE, ...) {
+  # deprecation warning
+  message("getClimateDataRaw() is deprecated and will be removed in future versions: ",
+          "use ec_climate_data_base() instead")
+
   timeframe <- match.arg(timeframe)
   if(timeframe == "daily" && is.na(Year)) stop("Year required for daily requests")
   if(timeframe == "hourly" && (is.na(Year) || is.na(Month) ))
@@ -287,8 +266,8 @@ getClimateDataRaw <- function(stationID, timeframe=c("monthly", "daily", "hourly
       nrows <- empty[2]-empty[1]-2
       if(nrows > 0) {
         flags <- try(utils::read.csv(textConnection(x), skip=empty[1]+1,
-                                 stringsAsFactors = F, check.names = F, header = FALSE,
-                                 nrows = nrows), silent = TRUE)
+                                     stringsAsFactors = F, check.names = F, header = FALSE,
+                                     nrows = nrows), silent = TRUE)
         if(class(flags) != "try-error") {
           names(flags) <- c("flag", "description")
         }
@@ -304,6 +283,94 @@ getClimateDataRaw <- function(stationID, timeframe=c("monthly", "daily", "hourly
   }
 }
 
+#' DEPRECATED: Deprecated climate locations (February 2017)
+#'
+#' Climate locations for Environment Canada, as of February 2017. This object is available
+#' for historical reasons, and will be removed in future versions.
+#' Instead, use \link{ec_climate_locations_all}.
+#'
+#' @format A data frame with 8735 rows and  19 variables. There are many columns,
+#'   only several of which are used within this package.
+#' \describe{
+#'   \item{Name}{the name of the location (in all caps)}
+#'   \item{Province}{the province containing the location (in all caps)}
+#'   \item{Climate ID}{IDs that may be used outside of EC}
+#'   \item{Station ID}{the ID to be used in \link{getClimateData} and \link{getClimateDataRaw}}
+#'   \item{WMO ID}{IDs that may be used outside of EC}
+#'   \item{TC ID}{IDs that may be used outside of EC}
+#'   \item{Latitude (Decimal Degrees)}{the latitude of the site}
+#'   \item{Longitude (Decimal Degrees)}{the longitude of the site}
+#'   \item{Latitude}{integer representation of the latitude}
+#'   \item{Longitude}{integer representation of the longitude}
+#'   \item{Elevation (m)}{The elevation of the site (in metres)}
+#'   \item{First Year}{The first year where data exists for this location (for MLY, DLY, or HLY resolution)}
+#'   \item{Last Year}{The first year where data exists for this location (for MLY, DLY, or HLY resolution)}
+#'   \item{MLY First Year}{The first year where data exists for this location (for MLY, DLY, or HLY resolution)}
+#'   \item{MLY Last Year}{The first year where data exists for this location (for MLY, DLY, or HLY resolution)}
+#'   \item{DLY First Year}{The first year where data exists for this location (for MLY, DLY, or HLY resolution)}
+#'   \item{DLY Last Year}{The first year where data exists for this location (for MLY, DLY, or HLY resolution)}
+#'   \item{HLY First Year}{The first year where data exists for this location (for MLY, DLY, or HLY resolution)}
+#'   \item{HLY Last Year}{The first year where data exists for this location (for MLY, DLY, or HLY resolution)}
+#' }
+#'
+#' @source \url{ftp://client_climate@ftp.tor.ec.gc.ca/Pub/Get_More_Data_Plus_de_donnees/}
+"ecclimatelocs"
+
+# load within package so the data can be used in getClimateSites()
+data("ecclimatelocs", envir=environment())
+
+#' Get Environment Canada locations.
+#'
+#' @param location A human-readable location that will be geocoded
+#' @param year A vector of years that the location must have data for
+#' @param n The number of rows to return
+#' @param locs The data.frame of locations. Use NULL to for \link{ecclimatelocs}.
+#' @param nicenames Sanitize names to type-able form
+#' @param cols The columns to return (use NULL for all columns)
+#'
+#' @return A subset of \link{ecclimatelocs}
+#' @export
+#'
+#' @references
+#' \url{ftp://client_climate@ftp.tor.ec.gc.ca/Pub/Get_More_Data_Plus_de_donnees/Readme.txt}
+#' \url{ftp://client_climate@ftp.tor.ec.gc.ca/Pub/Get_More_Data_Plus_de_donnees/}
+#'
+getClimateSites <- function(location, year=NULL, n=5, locs=NULL, nicenames=FALSE,
+                            cols=c("Name", "Province", "Station ID", "distance", "Latitude (Decimal Degrees)",
+                                   "Longitude (Decimal Degrees)", "First Year", "Last Year")) {
+  # deprecation warning
+  message("getClimateSites() is deprecated and will be removed in future versions: ",
+          "use ec_climate_find_locations() instead")
+
+  if(is.null(locs)) {
+    locs <- ecclimatelocs
+  }
+  if(is.null(cols)) {
+    cols <- names(locs)
+  }
+  locinfo <- suppressMessages(prettymapr::geocode(location))
+  lat <- locinfo$lat
+  lon <- locinfo$lon
+  if(is.na(lat) || is.na(lon)) {
+    stop("Location ", location, " could not be geocoded")
+  }
+
+  if(!is.null(year)) {
+    locs <- locs[sapply(1:nrow(locs), function(i) {
+      all(year %in% (locs[["First Year"]][i]:locs[["Last Year"]][i]))
+    }),]
+  }
+  locs$distance <- geodist(lon, lat,
+                           locs[["Longitude (Decimal Degrees)"]],
+                           locs[["Latitude (Decimal Degrees)"]]) / 1000.0
+  if(nicenames) {
+    names(locs) <- nice.names(names(locs))
+    locs <- locs[!duplicated(names(locs))] # removes duplicate lat/lon columns
+    cols <- nice.names(cols)
+  }
+  locs <- locs[order(locs$distance), cols][1:n,]
+  return(locs)
+}
 
 parsedates <- function(df, timeframe) {
   if(timeframe == "monthly") {
@@ -335,4 +402,47 @@ getyears <- function(stationID, timeframe) {
     ly <- lubridate::year(Sys.Date())
   }
   return(fy:ly)
+}
+
+# Melt multiple sets of columns in parallel
+#
+# Essentially this is a wrapper around \code{reshape2::melt.data.frame} that
+# is able to \code{cbind} several melt operations.
+#
+# @param x A data.frame
+# @param id.vars vector of ID variable names
+# @param variable.name Column name to use to store variables
+# @param ... Named arguments specifying the \code{measure.vars} to be stored to the
+#   column name specified.
+# @param factorsAsStrings Control whether factors are converted to character when melted as
+#   measure variables.
+#
+# @return A \code{qtag.long} object
+# @export
+#
+# @examples
+# data(pocmajpb210)
+# melt.parallel(pb210,
+#               id.vars=c("core", "depth"),
+#               values=c("Pb210", "age", "sar"),
+#               err=c("Pb210_sd", "age_sd", "sar_err"))
+#
+melt.parallel <- function(x, id.vars, variable.name="column", ..., factorsAsStrings=TRUE) {
+  combos <- list(...)
+  combonames <- names(combos)
+  if(length(combonames) != length(combos)) stop("All arguments must be named")
+  lengths <- unique(sapply(combos, length))
+  if(length(lengths) > 1) stop("All melted columns must have the same number of source columns")
+  melted <- lapply(combonames, function(varname) {
+    reshape2::melt(x, id.vars=id.vars, measure.vars=combos[[varname]], value.name=varname,
+                   variable.name=variable.name, factorsAsStrings=factorsAsStrings)
+  })
+  iddata <- melted[[1]][c(id.vars, variable.name)]
+  melted <- lapply(melted, function(df) df[names(df) %in% names(combos)])
+  do.call(cbind, c(list(iddata), melted))
+}
+
+nice.names <- function(x) {
+  # rename columns for easier access (strip units and whitespace and lowercase)
+  tolower(gsub("\\s|/", "", gsub("\\s*?\\(.*?\\)\\s*", "", x)))
 }
