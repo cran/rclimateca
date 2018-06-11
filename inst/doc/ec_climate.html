@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dewey Dunnington" />
 
-<meta name="date" content="2018-03-25" />
+<meta name="date" content="2018-06-11" />
 
 <title>Working with Historical Climate Data</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Working with Historical Climate Data</h1>
 <h4 class="author"><em>Dewey Dunnington</em></h4>
-<h4 class="date"><em>2018-03-25</em></h4>
+<h4 class="date"><em>2018-06-11</em></h4>
 
 
 
@@ -307,7 +307,7 @@ df &lt;-<span class="st"> </span><span class="kw">ec_climate_data</span>(
 )
 
 <span class="kw">attr</span>(df, <span class="st">&quot;flag_info&quot;</span>)
-<span class="co">#&gt; # A tibble: 14 x 2</span>
+<span class="co">#&gt; # A tibble: 13 x 2</span>
 <span class="co">#&gt;    flag    description                                                    </span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;                                                          </span>
 <span class="co">#&gt;  1 A       Accumulated                                                    </span>
@@ -322,8 +322,7 @@ df &lt;-<span class="st"> </span><span class="kw">ec_climate_data</span>(
 <span class="co">#&gt; 10 Y       Temperature missing but known to be &lt; 0                        </span>
 <span class="co">#&gt; 11 [empty] No data available                                              </span>
 <span class="co">#&gt; 12 ^       The value displayed is based on incomplete data                </span>
-<span class="co">#&gt; 13 †       Data for this day has undergone only basic quality checking    </span>
-<span class="co">#&gt; 14 ‡       Partner data that is not subject to review by the National Cli…</span></code></pre></div>
+<span class="co">#&gt; 13 †       Data that is not subject to review by the National Climate Arc…</span></code></pre></div>
 <p>This table is designed to be <code>left_join()</code>-able to the output of <code>ec_climate_long()</code>.</p>
 </div>
 <div id="getting-raw-output" class="section level2">
