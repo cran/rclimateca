@@ -1,6 +1,8 @@
 context("restquery")
 
 test_that("restquery returns a length 1 character vector", {
+  skip_if_offline()
+
   result <- restquery(.endpoint="https://httpbin.org/get",
                       arg1 = "value1", arg2 = "value2", .encoding = "UTF-8")
 
@@ -9,6 +11,8 @@ test_that("restquery returns a length 1 character vector", {
 })
 
 test_that("restquery fails properly", {
+  skip_if_offline()
+
   expect_error(
     restquery(.endpoint="https://not.an-address-at-all-ever-ever.org/get",
               arg1 = "value1", arg2 = "value2", .encoding = "UTF-8"),
@@ -17,6 +21,8 @@ test_that("restquery fails properly", {
 })
 
 test_that("messaging is supressed upon request", {
+  skip_if_offline()
+
   expect_message(
     restquery(.endpoint="https://httpbin.org/get",
               arg1 = "value1", arg2 = "value2", .encoding = "UTF-8",
@@ -32,6 +38,8 @@ test_that("messaging is supressed upon request", {
 })
 
 test_that("the parser is used when present", {
+  skip_if_offline()
+
   expect_is(
     restquery(.endpoint="https://httpbin.org/get",
               arg1 = "value1", arg2 = "value2", .encoding = "UTF-8",
@@ -41,6 +49,8 @@ test_that("the parser is used when present", {
 })
 
 test_that("the cache is used when present", {
+  skip_if_offline()
+
   temp_cache <- tempfile()
 
   # no files should have been downloaded

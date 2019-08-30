@@ -4,9 +4,9 @@
 \alias{ec_climate_data_base}
 \title{Low-level access to the EC Climate Bulk Data Service}
 \usage{
-ec_climate_data_base(location, timeframe = c("monthly", "daily", "hourly"),
-  year = NULL, month = NULL, cache = NULL, quiet = FALSE,
-  check_dates = FALSE,
+ec_climate_data_base(location, timeframe = c("monthly", "daily",
+  "hourly"), year = NULL, month = NULL, cache = NULL,
+  quiet = FALSE, check_dates = FALSE,
   endpoint = "http://climate.weather.gc.ca/climate_data/bulk_data_e.html")
 }
 \arguments{
@@ -31,7 +31,7 @@ this check.}
 }
 \value{
 A data.frame (tibble) of the downloaded data frame, with all columns as
-  character vectors
+character vectors
 }
 \description{
 Low-level access to the EC Climate Bulk Data Service

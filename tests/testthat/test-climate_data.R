@@ -1,6 +1,8 @@
 context("climate_data")
 
 test_that("ec_climate_data_base works as intended", {
+  skip_if_offline()
+
   # check a single instance of each monthly, daily, and hourly files
   monthly <- ec_climate_data_base(27141, timeframe = "monthly")
   daily <- ec_climate_data_base(27141, timeframe = "daily", year = 1999)
@@ -20,6 +22,8 @@ test_that("ec_climate_data_base works as intended", {
 })
 
 test_that("ec_climate_data works as intended", {
+  skip_if_offline()
+
   # check a single instance of each monthly, daily, and hourly files
   monthly <- ec_climate_data(27141, timeframe = "monthly")
   daily <- ec_climate_data(27141, timeframe = "daily", start = "1999-01-01", end = "1999-12-31")
@@ -39,6 +43,8 @@ test_that("ec_climate_data works as intended", {
 })
 
 test_that("column types for ec_climate_data() are correct", {
+  skip_if_offline()
+
   # check a single instance of each monthly, daily, and hourly files
   monthly <- ec_climate_data(27141, timeframe = "monthly")
   daily <- ec_climate_data(27141, timeframe = "daily", start = "1999-01-01", end = "1999-12-31")
@@ -123,6 +129,7 @@ test_that("column types for ec_climate_data() are correct", {
 })
 
 test_that("dates and times are parsed correctly", {
+  skip_if_offline()
 
   # check a single instance of each monthly, daily, and hourly files
   monthly <- ec_climate_data(27141, timeframe = "monthly")
@@ -181,6 +188,7 @@ test_that("dates and times are parsed correctly", {
 })
 
 test_that("times are parsed correctly for multiple locations", {
+  skip_if_offline()
 
   # check quietness of single location download
   expect_silent(ec_climate_data(27141, timeframe = "hourly", start = "1999-07-01", end = "1999-07-31"))
@@ -218,6 +226,7 @@ test_that("times are parsed correctly for multiple locations", {
 })
 
 test_that("date filtering is respected", {
+  skip_if_offline()
 
   # check a single instance of each monthly, daily, and hourly files
   start <- as.Date("1999-01-15")
@@ -238,6 +247,8 @@ test_that("date filtering is respected", {
 })
 
 test_that("dates with length != 1 produce errors", {
+  skip_if_offline()
+
   expect_error(
     ec_climate_data(27141, timeframe = "monthly", start = character(0), end = NA),
     "start must be length 1"
@@ -268,6 +279,8 @@ test_that("daily and hourly requests without start and end dates fail", {
 })
 
 test_that("no files are downloaded when the locations table indicates there is no data", {
+  skip_if_offline()
+
   temp_cache <- tempfile()
   dir.create(temp_cache)
 
@@ -303,6 +316,7 @@ test_that("no files are downloaded when the locations table indicates there is n
 })
 
 test_that("no files are downloaded when the locations table indicates there was never data", {
+  skip_if_offline()
 
   temp_cache <- tempfile()
   dir.create(temp_cache)
@@ -321,6 +335,8 @@ test_that("no files are downloaded when the locations table indicates there was 
 })
 
 test_that("parsing errors result in a warning and a problems attribute", {
+  skip_if_offline()
+
   expect_silent(
     ec_climate_data(
       "CHELSEA QC 5585", timeframe = "daily",
@@ -352,6 +368,8 @@ test_that("parsing errors result in a warning and a problems attribute", {
 })
 
 test_that("parse as character works", {
+  skip_if_offline()
+
   expect_silent(
     ec_climate_data(
       "KENTVILLE CDA CS NS 27141", timeframe = "daily",
@@ -371,6 +389,7 @@ test_that("parse as character works", {
 })
 
 test_that("the quiet flag is respected", {
+  skip_if_offline()
 
   expect_silent(ec_climate_data(27141, timeframe = "monthly"))
   expect_silent(ec_climate_data(27141, timeframe = "daily", start = "1996-01-01", end = "1996-12-31"))
@@ -393,6 +412,7 @@ test_that("the quiet flag is respected", {
 })
 
 test_that("the cache flag is respected", {
+  skip_if_offline()
 
   temp_cache <- tempfile()
   dir.create(temp_cache)
@@ -413,6 +433,7 @@ test_that("the cache flag is respected", {
 })
 
 test_that("ec_climate_long correctly transforms output", {
+  skip_if_offline()
 
   # check a single instance of each monthly, daily, and hourly files
   monthly <- ec_climate_data(27141, timeframe = "monthly")
@@ -440,6 +461,7 @@ test_that("ec_climate_long correctly transforms output", {
 })
 
 test_that("get mudata function for climate data works", {
+  skip_if_offline()
 
   # check a single instance of each monthly, daily, and hourly files
   monthly <- ec_climate_mudata(27141, timeframe = "monthly")
@@ -467,6 +489,7 @@ test_that("get mudata function for climate data works", {
 })
 
 test_that("get_mudata function works on zero-row (empty) outputs", {
+  skip_if_offline()
 
   # hourly first year is 1999, daily and monthly first year is 1996
   # monthly downloads have no constraints, and so it is not possible to avoid downloading
@@ -490,6 +513,8 @@ test_that("get_mudata function works on zero-row (empty) outputs", {
 })
 
 test_that("ec_climate_data_read_csv works on downloaded files", {
+  skip_if_offline()
+
   # url for monthly data from yellowknife
   url <- "http://climate.weather.gc.ca/climate_data/bulk_data_e.html?format=csv&stationID=1706&timeframe=3&submit=Download+Data"
 
